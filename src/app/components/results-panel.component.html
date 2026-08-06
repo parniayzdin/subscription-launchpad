@@ -1,0 +1,96 @@
+@if (analysis; as report) {
+  <aside class="preview-card result-preview" aria-live="polite">
+    <div class="result-heading">
+      <div>
+        <p class="panel-kicker">90-day launch report</p>
+        <h2>{{ productName }}</h2>
+      </div>
+      <span class="status" [class.ready]="report.readyToLaunch" [class.review]="!report.readyToLaunch">
+        {{ report.readyToLaunch ? "Ready" : errorCount(report) + " changes" }}
+      </span>
+    </div>
+
+    <div class="metric-grid">
+      <div class="metric">
+        <span>Subscriber price</span>
+        <strong>{{ formatMoney(report.discountedPriceCents) }}</strong>
+      </div>
+      <div class="metric">
+        <span>Projected revenue</span>
+        <strong>{{ formatMoney(report.projectedRevenueCents) }}</strong>
+      </div>
+      <div class="metric">
+        <span>Units required</span>
+        <strong>{{ report.projectedUnits }}</strong>
+      </div>
+    </div>
+
+    <section class="report-section" aria-labelledby="findings-heading">
+      <div class="section-heading">
+        <h3 id="findings-heading">Plan findings</h3>
+        <span>{{ report.issues.length }}</span>
+      </div>
+
+      @if (report.issues.length) {
+        <div class="issue-list">
+          @for (issue of report.issues; track issue.id) {
+            <article class="issue" [class.warning]="issue.severity === 'warning'" [class.error]="issue.severity === 'error'">
+              <span class="issue-mark" aria-hidden="true">{{ issue.severity === "error" ? "!" : "i" }}</span>
+              <div>
+                <h4>{{ issue.title }}</h4>
+                <p>{{ issue.message }}</p>
+                <small>{{ issue.suggestion }}</small>
+              </div>
+            </article>
+          }
+        </div>
+      } @else {
+        <div class="all-clear">
+          <span aria-hidden="true">✓</span>
+          <div>
+            <h4>No conflicts found</h4>
+            <p>The plan passed all four launch checks.</p>
+          </div>
+        </div>
+      }
+    </section>
+
+    <section class="report-section" aria-labelledby="timeline-heading">
+      <div class="section-heading">
+        <h3 id="timeline-heading">Upcoming activity</h3>
+        <span>First 6</span>
+      </div>
+      <ol class="timeline">
+        @for (event of report.schedule.slice(0, 6); track event.type + event.date; let index = $index) {
+          <li>
+            <time [attr.datetime]="event.date">{{ formatDate(event.date) }}</time>
+            <span class="event-dot" [class.billing]="event.type === 'billing'" [class.delivery]="event.type === 'delivery'" aria-hidden="true"></span>
+            <div>
+              <strong>{{ event.type === "billing" ? "Customer billing" : "Product delivery" }}</strong>
+              <small>{{ event.type === "billing" ? formatMoney(event.amountCents ?? 0) : (event.units ?? 0) + " units" }}</small>
+            </div>
+          </li>
+        }
+      </ol>
+    </section>
+  </aside>
+} @else {
+  <aside class="preview-card empty-preview" aria-live="polite">
+    <div class="preview-orbit" aria-hidden="true">
+      <span>90</span>
+      <small>days</small>
+    </div>
+    <p class="panel-kicker">Live preview</p>
+    <h2>One check before you launch.</h2>
+    <p>Launchpad checks the four details that commonly create confusing subscription experiences.</p>
+    <ul class="check-list">
+      <li><span>01</span> Pricing after discounts</li>
+      <li><span>02</span> Free-shipping eligibility</li>
+      <li><span>03</span> Billing and delivery timing</li>
+      <li><span>04</span> Inventory for expected demand</li>
+    </ul>
+    @if (error) {
+      <p class="form-error" role="alert">{{ error }}</p>
+    }
+  </aside>
+}
