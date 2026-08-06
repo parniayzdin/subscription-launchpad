@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Starter Project",
-  description: "A clean starting point for building your site.",
+  title: "Subscription Launchpad",
+  description:
+    "Build, preview, and validate a subscription plan before it goes live.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
