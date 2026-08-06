@@ -1,48 +1,56 @@
-/** Cloudflare Worker entry point for the vinext-starter template. */
-import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
-import handler from "vinext/server/app-router-entry";
+import { analyzeRequest } from "../lib/subscription/request";
 
 interface Env {
   ASSETS: {
     fetch(request: Request): Promise<Response>;
   };
-  IMAGES: {
-    input(stream: ReadableStream): {
-      transform(options: Record<string, unknown>): {
-        output(options: { format: string; quality: number }): Promise<{ response(): Response }>;
-      };
-    };
-  };
 }
 
-interface ExecutionContext {
-  waitUntil(promise: Promise<unknown>): void;
-  passThroughOnException(): void;
+function json(value: unknown, status = 200): Response {
+  return Response.json(value, {
+    status,
+    headers: {
+      "Cache-Control": "no-store"
+    }
+  });
 }
 
-// Image security config. SVG sources with .svg extension auto-skip the
-// optimization endpoint on the client side (served directly, no proxy).
-// To route SVGs through the optimizer (with security headers), set
-// dangerouslyAllowSVG: true in next.config.js and uncomment below:
-// const imageConfig: ImageConfig = { dangerouslyAllowSVG: true };
+async function analyze(request: Request): Promise<Response> {
+  try {
+    return json(analyzeRequest(await request.json()));
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "The plan could not be checked.";
+    return json({ message }, 400);
+  }
+}
 
 const worker = {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
-    if (url.pathname === "/_vinext/image") {
-      const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
-      return handleImageOptimization(request, {
-        fetchAsset: (path) => env.ASSETS.fetch(new Request(new URL(path, request.url))),
-        transformImage: async (body, { width, format, quality }) => {
-          const result = await env.IMAGES.input(body).transform(width > 0 ? { width } : {}).output({ format, quality });
-          return result.response();
-        },
-      }, allowedWidths);
+    if (url.pathname === "/api/analyze") {
+      if (request.method !== "POST") {
+        return json({ message: "Use POST to analyze a subscription plan." }, 405);
+      }
+      return analyze(request);
     }
 
-    return handler.fetch(request, env, ctx);
-  },
+    if (url.pathname.startsWith("/api/")) {
+      return json({ message: "API route not found." }, 404);
+    }
+
+    const assetResponse = await env.ASSETS.fetch(request);
+    if (assetResponse.status !== 404) {
+      return assetResponse;
+    }
+
+    const acceptsHtml = request.headers.get("accept")?.includes("text/html");
+    if (acceptsHtml) {
+      return env.ASSETS.fetch(new Request(new URL("/index.html", request.url), request));
+    }
+
+    return assetResponse;
+  }
 };
 
 export default worker;

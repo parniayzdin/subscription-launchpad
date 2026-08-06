@@ -1,5 +1,5 @@
-import { analyzePlan } from "@/lib/subscription/schedule";
-import type { SubscriptionPlan } from "@/lib/subscription/types";
+import { analyzePlan } from "./schedule";
+import type { PlanAnalysis, SubscriptionPlan } from "./types";
 
 const textFields: Array<keyof SubscriptionPlan> = ["productName", "startDate"];
 const numberFields: Array<keyof SubscriptionPlan> = [
@@ -10,10 +10,10 @@ const numberFields: Array<keyof SubscriptionPlan> = [
   "freeShippingThresholdCents",
   "activeSubscribers",
   "unitsPerDelivery",
-  "inventoryUnits",
+  "inventoryUnits"
 ];
 
-function parsePlan(value: unknown): SubscriptionPlan {
+export function parsePlan(value: unknown): SubscriptionPlan {
   if (!value || typeof value !== "object") {
     throw new Error("Add the subscription details before running the preview.");
   }
@@ -21,7 +21,7 @@ function parsePlan(value: unknown): SubscriptionPlan {
   const plan = value as Record<string, unknown>;
 
   for (const field of textFields) {
-    if (typeof plan[field] !== "string" || !plan[field].trim()) {
+    if (typeof plan[field] !== "string" || !(plan[field] as string).trim()) {
       throw new Error(`The ${field} field is required.`);
     }
   }
@@ -35,14 +35,6 @@ function parsePlan(value: unknown): SubscriptionPlan {
   return plan as unknown as SubscriptionPlan;
 }
 
-export async function POST(request: Request) {
-  try {
-    const plan = parsePlan(await request.json());
-    return Response.json(analyzePlan(plan));
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "The plan could not be checked.";
-
-    return Response.json({ message }, { status: 400 });
-  }
+export function analyzeRequest(value: unknown): PlanAnalysis {
+  return analyzePlan(parsePlan(value));
 }

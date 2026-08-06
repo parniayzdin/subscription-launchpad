@@ -1,0 +1,147 @@
+<section class="builder-card" [attr.aria-busy]="loading">
+  <div class="stepper" aria-label="Setup progress">
+    @for (label of steps; track label; let index = $index) {
+      <button
+        type="button"
+        class="step"
+        [class.active]="index === step()"
+        [class.complete]="index < step()"
+        [attr.aria-current]="index === step() ? 'step' : null"
+        [attr.aria-label]="'Step ' + (index + 1) + ': ' + label"
+        (click)="setStep(index)"
+      >
+        <span>{{ index + 1 }}</span>
+        {{ label }}
+      </button>
+    }
+  </div>
+
+  <form (submit)="$event.preventDefault(); submit()">
+    @if (step() === 0) {
+      <fieldset>
+        <legend>Create the offer</legend>
+        <p class="field-intro">Start with what subscribers will buy and pay.</p>
+
+        <label class="field full">
+          <span>Product name</span>
+          <input [value]="plan.productName" (input)="updateText('productName', $event)" required>
+        </label>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Regular price</span>
+            <div class="input-prefix">
+              <b>$</b>
+              <input
+                type="number"
+                min="0.01"
+                step="0.01"
+                [value]="(plan.priceCents / 100).toFixed(2)"
+                (input)="updateMoney('priceCents', $event)"
+                required
+              >
+            </div>
+          </label>
+
+          <label class="field">
+            <span>Subscriber discount</span>
+            <div class="input-suffix">
+              <input
+                type="number"
+                min="0"
+                max="99"
+                [value]="plan.discountPercent"
+                (input)="updateNumber('discountPercent', $event)"
+                required
+              >
+              <b>%</b>
+            </div>
+          </label>
+        </div>
+
+        <label class="field full">
+          <span>First billing date</span>
+          <input type="date" [value]="plan.startDate" (input)="updateText('startDate', $event)" required>
+        </label>
+      </fieldset>
+    }
+
+    @if (step() === 1) {
+      <fieldset>
+        <legend>Choose the schedule</legend>
+        <p class="field-intro">Set how often customers pay and receive the product.</p>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Bill customers</span>
+            <select [value]="plan.billingEveryWeeks" (change)="updateNumber('billingEveryWeeks', $event)">
+              <option value="1">Every week</option>
+              <option value="2">Every 2 weeks</option>
+              <option value="4">Every 4 weeks</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Deliver products</span>
+            <select [value]="plan.deliveryEveryWeeks" (change)="updateNumber('deliveryEveryWeeks', $event)">
+              <option value="1">Every week</option>
+              <option value="2">Every 2 weeks</option>
+              <option value="4">Every 4 weeks</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="field full">
+          <span>Free-shipping minimum</span>
+          <div class="input-prefix">
+            <b>$</b>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              [value]="(plan.freeShippingThresholdCents / 100).toFixed(2)"
+              (input)="updateMoney('freeShippingThresholdCents', $event)"
+            >
+          </div>
+        </label>
+      </fieldset>
+    }
+
+    @if (step() === 2) {
+      <fieldset>
+        <legend>Check launch readiness</legend>
+        <p class="field-intro">Estimate whether inventory can support the first 90 days.</p>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Starting subscribers</span>
+            <input type="number" min="1" [value]="plan.activeSubscribers" (input)="updateNumber('activeSubscribers', $event)">
+          </label>
+
+          <label class="field">
+            <span>Units per delivery</span>
+            <input type="number" min="1" [value]="plan.unitsPerDelivery" (input)="updateNumber('unitsPerDelivery', $event)">
+          </label>
+        </div>
+
+        <label class="field full">
+          <span>Available inventory</span>
+          <input type="number" min="0" [value]="plan.inventoryUnits" (input)="updateNumber('inventoryUnits', $event)">
+        </label>
+      </fieldset>
+    }
+
+    <div class="form-actions">
+      <button class="secondary-button" type="button" (click)="previousStep()" [disabled]="step() === 0">
+        Back
+      </button>
+      <button class="primary-button" type="submit" [disabled]="loading">
+        @if (step() === steps.length - 1) {
+          {{ loading ? "Checking plan..." : "Run launch check" }}
+        } @else {
+          Continue
+        }
+      </button>
+    </div>
+  </form>
+</section>

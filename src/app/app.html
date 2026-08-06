@@ -1,0 +1,44 @@
+<main class="site-shell">
+  <a class="skip-link" href="#workspace">Skip to plan builder</a>
+
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Subscription Launchpad home">
+      <span class="brand-mark" aria-hidden="true">SL</span>
+      <span>Subscription Launchpad</span>
+    </a>
+    <span class="demo-pill">Angular demo</span>
+  </header>
+
+  <section class="hero" id="top">
+    <div>
+      <p class="eyebrow">Plan with confidence</p>
+      <h1>Build a subscription customers can trust.</h1>
+      <p class="hero-copy">
+        Set up the offer, preview the next 90 days, and catch pricing,
+        shipping, schedule, or inventory problems before launch.
+      </p>
+    </div>
+    <div class="hero-note" aria-label="Launchpad workflow">
+      <span>Configure</span>
+      <i aria-hidden="true"></i>
+      <span>Preview</span>
+      <i aria-hidden="true"></i>
+      <span>Validate</span>
+    </div>
+  </section>
+
+  <section class="workspace" id="workspace" aria-label="Subscription plan workspace">
+    <app-plan-builder
+      [plan]="plan()"
+      [loading]="loading()"
+      (planChange)="updatePlan($event)"
+      (analyze)="runAnalysis()"
+    />
+
+    <app-results-panel
+      [analysis]="analysis()"
+      [productName]="plan().productName"
+      [error]="error()"
+    />
+  </section>
+</main>
