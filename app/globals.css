@@ -30,8 +30,27 @@ body {
     radial-gradient(circle at 8% 4%, rgba(201, 240, 107, 0.34), transparent 24rem),
     radial-gradient(circle at 94% 17%, rgba(111, 104, 220, 0.12), transparent 22rem),
     var(--canvas);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   min-height: 100vh;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 50;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-decoration: none;
+  transform: translateY(-160%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
 }
 
 button,

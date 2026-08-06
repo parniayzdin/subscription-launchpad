@@ -37,7 +37,7 @@ export function PlanBuilder({
   }
 
   return (
-    <section className="builder-card">
+    <section className="builder-card" aria-busy={loading}>
       <div className="stepper" aria-label="Setup progress">
         {steps.map((label, index) => (
           <button
@@ -52,6 +52,7 @@ export function PlanBuilder({
             key={label}
             onClick={() => setStep(index)}
             aria-current={index === step ? "step" : undefined}
+            aria-label={`Step ${index + 1}: ${label}`}
           >
             <span>{index + 1}</span>
             {label}

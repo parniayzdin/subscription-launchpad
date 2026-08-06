@@ -46,7 +46,11 @@ export function ResultsPanel({
           <li><span>03</span> Billing and delivery timing</li>
           <li><span>04</span> Inventory for expected demand</li>
         </ul>
-        {error ? <p className="form-error">{error}</p> : null}
+        {error ? (
+          <p className="form-error" role="alert">
+            {error}
+          </p>
+        ) : null}
       </aside>
     );
   }

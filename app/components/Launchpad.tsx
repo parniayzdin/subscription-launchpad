@@ -51,6 +51,9 @@ export function Launchpad() {
 
   return (
     <main className="site-shell">
+      <a className="skip-link" href="#workspace">
+        Skip to plan builder
+      </a>
       <header className="topbar">
         <a
           className="brand"
@@ -83,7 +86,11 @@ export function Launchpad() {
         </div>
       </section>
 
-      <section className="workspace" aria-label="Subscription plan workspace">
+      <section
+        className="workspace"
+        id="workspace"
+        aria-label="Subscription plan workspace"
+      >
         <PlanBuilder
           plan={plan}
           loading={loading}
