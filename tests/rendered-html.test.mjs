@@ -1,54 +1,61 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const templateRoot = new URL("../", import.meta.url);
+test("builds the Angular Subscription Launchpad shell", async () => {
+  const [html, appTemplate, builderTemplate, styles, packageJson] =
+    await Promise.all([
+      readFile(new URL("../dist/client/index.html", import.meta.url), "utf8"),
+      readFile(new URL("../src/app/app.html", import.meta.url), "utf8"),
+      readFile(
+        new URL("../src/app/components/plan-builder.component.html", import.meta.url),
+        "utf8",
+      ),
+      readFile(new URL("../src/styles.css", import.meta.url), "utf8"),
+      readFile(new URL("../package.json", import.meta.url), "utf8"),
+    ]);
 
-async function render() {
+  assert.match(html, /<title>Subscription Launchpad<\/title>/i);
+  assert.match(html, /<app-root><\/app-root>/i);
+  assert.match(appTemplate, /Build a subscription customers can trust/);
+  assert.match(builderTemplate, /aria-label="Setup progress"/);
+  assert.match(styles, /:focus-visible/);
+  assert.match(styles, /prefers-reduced-motion/);
+  assert.match(packageJson, /"@angular\/core"/);
+  assert.doesNotMatch(packageJson, /"react"|"vinext"/);
+});
+
+test("serves the subscription analysis API from the worker", async () => {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
 
-  return worker.fetch(
-    new Request("http://localhost/", {
-      headers: { accept: "text/html" },
+  const response = await worker.fetch(
+    new Request("http://localhost/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        productName: "Coffee Club",
+        startDate: "2026-09-01",
+        priceCents: 4500,
+        discountPercent: 15,
+        billingEveryWeeks: 2,
+        deliveryEveryWeeks: 2,
+        freeShippingThresholdCents: 4000,
+        activeSubscribers: 24,
+        unitsPerDelivery: 1,
+        inventoryUnits: 180,
+      }),
     }),
     {
       ASSETS: {
         fetch: async () => new Response("Not found", { status: 404 }),
       },
     },
-    {
-      waitUntil() {},
-      passThroughOnException() {},
-    },
   );
-}
 
-test("server-renders the Subscription Launchpad", async () => {
-  const response = await render();
   assert.equal(response.status, 200);
-  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
-
-  const html = await response.text();
-  assert.match(html, /<title>Subscription Launchpad<\/title>/i);
-  assert.match(html, /Build a subscription customers can trust/);
-  assert.match(html, /Plan with confidence/);
-  assert.match(html, /aria-label="Setup progress"/);
-  assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
-});
-
-test("keeps the finished page accessible and free of starter content", async () => {
-  const [layout, styles, packageJson] = await Promise.all([
-    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
-    readFile(new URL("../package.json", import.meta.url), "utf8"),
-  ]);
-
-  assert.match(layout, /const title = "Subscription Launchpad"/);
-  assert.match(layout, /og\.png/);
-  assert.match(styles, /:focus-visible/);
-  assert.match(styles, /prefers-reduced-motion/);
-  assert.doesNotMatch(packageJson, /react-loading-skeleton/);
-  await assert.rejects(access(new URL("../app/_sites-preview", templateRoot)));
+  const analysis = await response.json();
+  assert.equal(analysis.readyToLaunch, true);
+  assert.equal(analysis.schedule.length, 14);
 });

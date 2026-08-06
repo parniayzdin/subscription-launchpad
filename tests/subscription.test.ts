@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { analyzePlan, buildSchedule } from "../lib/subscription/schedule";
+import { analyzeRequest, parsePlan } from "../lib/subscription/request";
 import { samplePlan } from "../lib/subscription/types";
 import {
   calculateDiscountedPriceCents,
@@ -51,5 +52,16 @@ test("allows warnings while blocking plans with errors", () => {
   assert.equal(
     analyzePlan({ ...samplePlan, inventoryUnits: 100 }).readyToLaunch,
     false,
+  );
+});
+
+test("parses an API-ready subscription plan", () => {
+  assert.deepEqual(parsePlan(samplePlan), samplePlan);
+});
+
+test("rejects incomplete API input", () => {
+  assert.throws(
+    () => analyzeRequest({ productName: "Coffee" }),
+    /startDate field is required/,
   );
 });

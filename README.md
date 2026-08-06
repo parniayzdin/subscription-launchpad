@@ -8,7 +8,7 @@ The project is intentionally simple. It demonstrates commerce logic, API design,
 
 ```mermaid
 flowchart LR
-    A["Merchant enters a plan"] --> B["Three-step React form"]
+    A["Merchant enters a plan"] --> B["Three-step Angular form"]
     B --> C["POST /api/analyze"]
     C --> D["Subscription rules"]
     C --> E["90-day schedule builder"]
@@ -28,14 +28,14 @@ The schedule builder also estimates billing events, deliveries, revenue, and inv
 
 ## Run locally
 
-Requirements: Node.js 22.13 or newer.
+Requirements: Node.js 22.12 or newer.
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Open `http://localhost:4200`.
 
 ## Verify the project
 
@@ -44,12 +44,12 @@ npm run lint
 npm test
 ```
 
-The tests cover the subscription rules, schedule calculations, API-ready analysis, and rendered page output.
+The tests cover the subscription rules, schedule calculations, API input, Angular build output, and deployed worker API.
 
 ## Technology
 
-- TypeScript and React
-- Next-compatible API route through Vinext
+- Angular and TypeScript
+- Cloudflare Worker REST API
 - Deterministic business rules
 - Node test runner and TSX
 - Cloudflare Workers-compatible deployment
