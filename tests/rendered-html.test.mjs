@@ -45,7 +45,8 @@ test("keeps the finished page accessible and free of starter content", async () 
     readFile(new URL("../package.json", import.meta.url), "utf8"),
   ]);
 
-  assert.match(layout, /title:\s*"Subscription Launchpad"/);
+  assert.match(layout, /const title = "Subscription Launchpad"/);
+  assert.match(layout, /og\.png/);
   assert.match(styles, /:focus-visible/);
   assert.match(styles, /prefers-reduced-motion/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
