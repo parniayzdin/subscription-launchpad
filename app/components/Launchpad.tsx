@@ -7,6 +7,7 @@ import type {
 } from "@/lib/subscription/types";
 import { samplePlan } from "@/lib/subscription/types";
 import { PlanBuilder } from "./PlanBuilder";
+import { ResultsPanel } from "./ResultsPanel";
 
 export function Launchpad() {
   const [plan, setPlan] = useState<SubscriptionPlan>(samplePlan);
@@ -93,16 +94,11 @@ export function Launchpad() {
           onAnalyze={runAnalysis}
         />
 
-        <aside className="preview-card" aria-live="polite">
-          <p className="panel-kicker">Live preview</p>
-          <h2>{analysis ? "Your report is ready" : "Complete the three steps"}</h2>
-          <p>
-            {analysis
-              ? `${analysis.issues.length} checks need your attention.`
-              : "Your pricing, schedule, and readiness report will appear here."}
-          </p>
-          {error ? <p className="form-error">{error}</p> : null}
-        </aside>
+        <ResultsPanel
+          analysis={analysis}
+          productName={plan.productName}
+          error={error}
+        />
       </section>
     </main>
   );
