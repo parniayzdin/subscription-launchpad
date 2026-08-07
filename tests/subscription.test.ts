@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { serializeSavedPlan } from "../lib/plans/types";
 import { analyzePlan, buildSchedule } from "../lib/subscription/schedule";
 import { analyzeRequest, parsePlan } from "../lib/subscription/request";
 import { samplePlan } from "../lib/subscription/types";
@@ -64,4 +65,18 @@ test("rejects incomplete API input", () => {
     () => analyzeRequest({ productName: "Coffee" }),
     /startDate field is required/,
   );
+});
+
+test("serializes a saved subscription plan for the API", () => {
+  const analysis = analyzePlan(samplePlan);
+  const saved = serializeSavedPlan({
+    _id: { toString: () => "plan-123" },
+    plan: samplePlan,
+    analysis,
+    savedAt: new Date("2026-08-06T12:00:00.000Z")
+  });
+
+  assert.equal(saved.id, "plan-123");
+  assert.equal(saved.plan.productName, samplePlan.productName);
+  assert.equal(saved.savedAt, "2026-08-06T12:00:00.000Z");
 });
