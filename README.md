@@ -61,6 +61,3 @@ The tests cover the subscription rules, schedule calculations, API input, Angula
 - Node test runner and TSX
 - Cloudflare Workers-compatible deployment
 
-## Project scope
-
-This portfolio project does not process payments, change store data, or require a Shopify account. Its inputs are sample planning data, so it can be used as a general subscription-commerce prototype rather than a Shopify-only application.
