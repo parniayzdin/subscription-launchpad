@@ -59,3 +59,23 @@ test("serves the subscription analysis API from the worker", async () => {
   assert.equal(analysis.readyToLaunch, true);
   assert.equal(analysis.schedule.length, 14);
 });
+
+test("explains when MongoDB plan storage is not connected", async () => {
+  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
+  workerUrl.searchParams.set("storage-test", `${process.pid}-${Date.now()}`);
+  const { default: worker } = await import(workerUrl.href);
+
+  const response = await worker.fetch(
+    new Request("http://localhost/api/plans"),
+    {
+      ASSETS: {
+        fetch: async () => new Response("Not found", { status: 404 })
+      }
+    }
+  );
+
+  assert.equal(response.status, 503);
+  assert.deepEqual(await response.json(), {
+    message: "Plan storage is not connected yet."
+  });
+});
