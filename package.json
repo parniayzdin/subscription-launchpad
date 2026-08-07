@@ -10,7 +10,7 @@
     "dev:api": "tsx scripts/dev-api.ts",
     "dev:ui": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build && npm run build:worker && node scripts/finalize-build.mjs",
-    "build:worker": "esbuild worker/index.ts --bundle --format=esm --platform=browser --target=es2022 --outfile=dist/server/index.js",
+    "build:worker": "node scripts/build-worker.mjs",
     "start": "npm run dev",
     "test": "npm run test:unit && npm run build && node --test tests/rendered-html.test.mjs",
     "test:unit": "tsx --test tests/subscription.test.ts",
@@ -22,6 +22,7 @@
     "@angular/core": "^21.2.0",
     "@angular/forms": "^21.2.0",
     "@angular/platform-browser": "^21.2.0",
+    "mongodb": "^7.5.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.8.1"
   },
