@@ -39,6 +39,17 @@
       [analysis]="analysis()"
       [productName]="plan().productName"
       [error]="error()"
+      [saving]="saving()"
+      [saveMessage]="saveMessage()"
+      [storageAvailable]="storageAvailable()"
+      (savePlan)="saveCurrentPlan()"
     />
   </section>
+
+  <app-saved-plans
+    [plans]="savedPlans()"
+    [loading]="loadingSavedPlans()"
+    [storageAvailable]="storageAvailable()"
+    (openPlan)="openSavedPlan($event)"
+  />
 </main>

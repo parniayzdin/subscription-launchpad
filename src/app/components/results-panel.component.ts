@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import type { PlanAnalysis } from "../../../lib/subscription/types";
 
 @Component({
@@ -10,6 +10,10 @@ export class ResultsPanelComponent {
   @Input() analysis: PlanAnalysis | null = null;
   @Input() productName = "";
   @Input() error = "";
+  @Input() saving = false;
+  @Input() saveMessage = "";
+  @Input() storageAvailable = true;
+  @Output() readonly savePlan = new EventEmitter<void>();
 
   formatMoney(cents: number): string {
     return new Intl.NumberFormat("en-CA", {

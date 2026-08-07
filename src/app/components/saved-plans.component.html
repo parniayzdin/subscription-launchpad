@@ -1,0 +1,38 @@
+<section class="saved-plans" aria-labelledby="saved-plans-heading">
+  <div class="saved-plans-heading">
+    <div>
+      <p class="eyebrow">Saved in MongoDB</p>
+      <h2 id="saved-plans-heading">Reuse a previous plan.</h2>
+    </div>
+    <span>{{ plans.length }} saved</span>
+  </div>
+
+  @if (!storageAvailable) {
+    <p class="saved-plans-empty">Connect MongoDB to save and reopen subscription plans.</p>
+  } @else if (loading) {
+    <p class="saved-plans-empty">Loading saved plans...</p>
+  } @else if (plans.length) {
+    <div class="saved-plan-grid">
+      @for (saved of plans; track saved.id) {
+        <article class="saved-plan-card">
+          <div>
+            <span [class.ready]="saved.analysis.readyToLaunch">
+              {{ saved.analysis.readyToLaunch ? "Ready" : "Needs changes" }}
+            </span>
+            <h3>{{ saved.plan.productName }}</h3>
+            <p>
+              {{ saved.plan.billingEveryWeeks }} week billing ·
+              {{ saved.plan.deliveryEveryWeeks }} week delivery
+            </p>
+            <small>Saved {{ formatDate(saved.savedAt) }}</small>
+          </div>
+          <button type="button" class="secondary-button" (click)="openPlan.emit(saved)">
+            Open plan
+          </button>
+        </article>
+      }
+    </div>
+  } @else {
+    <p class="saved-plans-empty">Run a launch check, then save the plan for later.</p>
+  }
+</section>

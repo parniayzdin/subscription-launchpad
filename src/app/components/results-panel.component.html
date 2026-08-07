@@ -10,6 +10,18 @@
       </span>
     </div>
 
+    <div class="save-row">
+      <p>{{ saveMessage || "Keep this plan and reopen it later." }}</p>
+      <button
+        type="button"
+        class="save-button"
+        [disabled]="saving || !storageAvailable"
+        (click)="savePlan.emit()"
+      >
+        {{ saving ? "Saving..." : storageAvailable ? "Save plan" : "Storage not connected" }}
+      </button>
+    </div>
+
     <div class="metric-grid">
       <div class="metric">
         <span>Subscriber price</span>
