@@ -1,8 +1,15 @@
 import { createServer, type IncomingMessage } from "node:http";
+import { loadEnvFile } from "node:process";
 import { analyzeRequest, parsePlan } from "../lib/subscription/request";
 import { listPlans, savePlan, type MongoSettings } from "../lib/plans/mongodb";
 
 const port = 8787;
+
+try {
+  loadEnvFile();
+} catch {
+  // MongoDB is optional until a local .env file is created.
+}
 
 function mongoSettings(): MongoSettings {
   if (!process.env["MONGODB_URI"]) {
