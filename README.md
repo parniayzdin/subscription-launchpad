@@ -6,19 +6,9 @@ The project is intentionally simple. It demonstrates commerce logic, API design,
 
 ## How it works
 
-```mermaid
-flowchart LR
-    A["Merchant enters a plan"] --> B["Three-step Angular form"]
-    B --> C["POST /api/analyze"]
-    C --> D["Subscription rules"]
-    C --> E["90-day schedule builder"]
-    D --> F["Readiness report"]
-    E --> F
-    F --> G["Findings, totals, and timeline"]
-    G --> H["Save plan"]
-    H --> I["MongoDB"]
-    I --> J["Reopen a saved plan"]
-```
+![Subscription Launchpad architecture](docs/subscription-launchpad-architecture.png)
+
+The diagram shows the main validation flow. After the report is created, a merchant can optionally save the plan and its results in MongoDB, then reopen it later.
 
 The rules engine checks whether:
 
