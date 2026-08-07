@@ -1,4 +1,4 @@
-import { MongoClient, type Collection } from "mongodb";
+import type { Collection } from "mongodb";
 import type { PlanAnalysis, SubscriptionPlan } from "../subscription/types";
 import { serializeSavedPlan, type SavedPlan } from "./types";
 
@@ -17,6 +17,7 @@ async function useCollection<T>(
   settings: MongoSettings,
   operation: (collection: Collection<PlanDocument>) => Promise<T>
 ): Promise<T> {
+  const { MongoClient } = await import("mongodb");
   const client = new MongoClient(settings.uri);
 
   try {
