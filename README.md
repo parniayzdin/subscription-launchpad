@@ -4,6 +4,12 @@ Subscription Launchpad is a small planning tool for merchants who want to check 
 
 The project is intentionally simple. It demonstrates commerce logic, API design, validation, testing, and a clear user workflow without connecting to a real store or payment system.
 
+## Live demo
+
+[Open Subscription Launchpad](https://subscription-launchpad.parnia-yazdinia.chatgpt.site)
+
+Configure a subscription offer, preview its first 90 days, and run the pricing, shipping, schedule, and inventory checks directly in the browser.
+
 ## How it works
 
 ![Subscription Launchpad architecture](docs/subscription-launchpad-architecture.png)
