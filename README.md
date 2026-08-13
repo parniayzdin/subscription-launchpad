@@ -1,12 +1,12 @@
 # Subscription Launchpad
 
-Subscription Launchpad is a small planning tool for merchants who want to check a subscription offer before launching it. A merchant enters the product price, discount, billing and delivery timing, shipping threshold, expected subscribers, and available inventory. The app returns a launch-readiness report and a 90-day schedule. Merchants can also save checked plans in MongoDB and reopen them later.
+Subscription Launchpad is a small planning tool for merchants who want to check a subscription offer before launching it. A merchant enters the product price, discount, billing and delivery timing, shipping threshold, expected subscribers, and available inventory. The app returns a launch readiness report and a 90 day schedule. Merchants can also save checked plans in MongoDB and reopen them later.
 
 The project is intentionally simple. It demonstrates commerce logic, API design, validation, testing, and a clear user workflow without connecting to a real store or payment system.
 
 ## Live demo
 
-[Open Subscription Launchpad](https://subscription-launchpad.parnia-yazdinia.chatgpt.site)
+[Open Subscription Launchpad](https://subscriptionlaunchpad.vercel.app)
 
 Configure a subscription offer, preview its first 90 days, and run the pricing, shipping, schedule, and inventory checks directly in the browser.
 
@@ -19,7 +19,7 @@ The diagram shows the main validation flow. After the report is created, a merch
 The rules engine checks whether:
 
 - the discount leaves a valid positive price;
-- the discounted price changes free-shipping eligibility;
+- the discounted price changes free shipping eligibility;
 - billing and delivery happen on different schedules; and
 - available inventory covers the next 90 days.
 
@@ -65,5 +65,5 @@ The tests cover the subscription rules, schedule calculations, API input, Angula
 - MongoDB for saved plans
 - Deterministic business rules
 - Node test runner and TSX
-- Cloudflare Workers-compatible deployment
+- Deployment compatible with Cloudflare Workers
 
