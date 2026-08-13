@@ -1,4 +1,4 @@
-import type { PlanAnalysis, SubscriptionPlan } from "../subscription/types";
+import type { PlanAnalysis, SubscriptionPlan } from "../subscription/types.js";
 
 export interface SavedPlan {
   id: string;

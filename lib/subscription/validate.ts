@@ -1,4 +1,4 @@
-import type { SubscriptionPlan, ValidationIssue } from "./types";
+import type { SubscriptionPlan, ValidationIssue } from "./types.js";
 
 const DAYS_PER_WEEK = 7;
 

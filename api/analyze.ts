@@ -1,4 +1,4 @@
-import { analyzeRequest } from "../lib/subscription/request";
+import { analyzeRequest } from "../lib/subscription/request.js";
 
 function json(value: unknown, status = 200): Response {
   return Response.json(value, {

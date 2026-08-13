@@ -1,5 +1,5 @@
-import { listPlans, savePlan, type MongoSettings } from "../lib/plans/mongodb";
-import { analyzeRequest, parsePlan } from "../lib/subscription/request";
+import { listPlans, savePlan, type MongoSettings } from "../lib/plans/mongodb.js";
+import { analyzeRequest, parsePlan } from "../lib/subscription/request.js";
 
 function json(value: unknown, status = 200): Response {
   return Response.json(value, {
