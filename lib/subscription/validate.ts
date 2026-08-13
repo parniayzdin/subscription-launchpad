@@ -51,9 +51,9 @@ export function validatePlan(
       id: "shipping",
       severity: "warning",
       title: "The discount removes free shipping",
-      message: `The regular price qualifies, but the subscription price becomes ${formatMoney(discountedPrice)}—below the ${formatMoney(plan.freeShippingThresholdCents)} threshold.`,
+      message: `The regular price qualifies, but the subscription price becomes ${formatMoney(discountedPrice)}. This is below the ${formatMoney(plan.freeShippingThresholdCents)} threshold.`,
       suggestion:
-        "Lower the free-shipping threshold or clearly show subscribers the shipping charge.",
+        "Lower the free shipping threshold or clearly show subscribers the shipping charge.",
     });
   }
 
