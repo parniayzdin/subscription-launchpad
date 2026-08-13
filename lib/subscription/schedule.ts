@@ -3,11 +3,11 @@ import type {
   ScheduleEvent,
   ScheduleEventType,
   SubscriptionPlan,
-} from "./types";
+} from "./types.js";
 import {
   calculateDiscountedPriceCents,
   validatePlan,
-} from "./validate";
+} from "./validate.js";
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 

@@ -1,5 +1,5 @@
-import { analyzePlan } from "./schedule";
-import type { PlanAnalysis, SubscriptionPlan } from "./types";
+import { analyzePlan } from "./schedule.js";
+import type { PlanAnalysis, SubscriptionPlan } from "./types.js";
 
 const textFields: Array<keyof SubscriptionPlan> = ["productName", "startDate"];
 const numberFields: Array<keyof SubscriptionPlan> = [

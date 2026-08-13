@@ -1,6 +1,6 @@
 import type { Collection } from "mongodb";
-import type { PlanAnalysis, SubscriptionPlan } from "../subscription/types";
-import { serializeSavedPlan, type SavedPlan } from "./types";
+import type { PlanAnalysis, SubscriptionPlan } from "../subscription/types.js";
+import { serializeSavedPlan, type SavedPlan } from "./types.js";
 
 export interface MongoSettings {
   uri: string;
