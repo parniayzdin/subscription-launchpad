@@ -1,7 +1,7 @@
 # Subscription Launchpad
 
 Subscription Launchpad is a small planning tool for merchants who want to check a subscription offer before launching it. A merchant enters the product price, discount, billing and delivery timing, shipping threshold, expected subscribers, and available inventory. The app returns a report and a 90 day schedule. Merchants can also save checked plans in MongoDB and reopen them later. 
-Although this was my first time working with Angular, I was able to quickly become comfortable with the framework and use it effectively to build the application’s interface. The project also made extensive use of MongoDB, TypeScript, and REST APIs, allowing me to bring these technologies together to create a solid tool.
+Although this was my first time working with Angular, I was able to quickly become comfortable with the framework and use it effectively to build the application’s interface. The project also made extensive use of MongoDB, TypeScript, and REST APIs, allowing me to bring these technologies together to create a solid tool!
 
 
 ## Live demo
